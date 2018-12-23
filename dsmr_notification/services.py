@@ -1,11 +1,12 @@
 import logging
 
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.conf import settings
 import requests
 
 from dsmr_notification.models.settings import NotificationSetting, StatusNotificationSetting
+from dsmr_backend.models.settings import BackendSettings
 from dsmr_stats.models.statistics import DayStatistics
 from dsmr_datalogger.models.reading import DsmrReading
 from dsmr_frontend.models.message import Notification
@@ -161,8 +162,10 @@ def notify():
     # For backend logging in Supervisor.
     logger.debug(' - Creating new notification containing daily usage.')
 
-    message = create_consumption_message(midnight, stats)
-    send_notification(message, str(_('Daily usage notification')))
+    with translation.override(language=BackendSettings.get_solo().language):
+        message = create_consumption_message(midnight, stats)
+        send_notification(message, str(_('Daily usage notification')))
+
     set_next_notification()
 
 
@@ -192,12 +195,14 @@ def check_status():
 
     # Alert!
     logger.debug(' - Sending notification about datalogger lagging behind...')
-    send_notification(
-        str(_('It has been over {} hour(s) since the last reading received. Please check your datalogger.'.format(
-            settings.DSMRREADER_STATUS_NOTIFICATION_COOLDOWN_HOURS
-        ))),
-        str(_('Datalogger check'))
-    )
+
+    with translation.override(language=BackendSettings.get_solo().language):
+        send_notification(
+            str(_('It has been over {} hour(s) since the last reading received. Please check your datalogger.'.format(
+                settings.DSMRREADER_STATUS_NOTIFICATION_COOLDOWN_HOURS
+            ))),
+            str(_('Datalogger check'))
+        )
 
     StatusNotificationSetting.objects.update(
         next_check=timezone.now() + timezone.timedelta(hours=settings.DSMRREADER_STATUS_NOTIFICATION_COOLDOWN_HOURS)

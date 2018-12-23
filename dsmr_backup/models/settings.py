@@ -6,7 +6,7 @@ from solo.models import SingletonModel
 
 
 class BackupSettings(SingletonModel):
-    """ Singleton model restricted by django-solo plugin. Settings for this application only. """
+    """ Generic backup settings. """
     daily_backup = models.BooleanField(
         default=True,
         verbose_name=_('Backup daily'),
@@ -45,7 +45,7 @@ class BackupSettings(SingletonModel):
 
 
 class DropboxSettings(SingletonModel):
-    """ Singleton model restricted by django-solo plugin. Settings for this application only. """
+    """ Dropbox backup upload settings. """
     access_token = models.CharField(
         max_length=128,
         default=None,
@@ -74,3 +74,77 @@ class DropboxSettings(SingletonModel):
     class Meta:
         default_permissions = tuple()
         verbose_name = _('Dropbox configuration')
+
+
+class EmailSettings(SingletonModel):
+    """ Backup by email settings. """
+    email_to = models.EmailField(
+        max_length=255,
+        default=None,
+        null=True,
+        blank=True,
+        help_text=_('The email address to send the backup to')
+    )
+    host = models.CharField(
+        max_length=255,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_('Email server: Host'),
+        help_text=_('The hostname of the server used to send emails with')
+    )
+    port = models.IntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_('Email server: Port'),
+        help_text=_('The port used by the email server to send mail')
+    )
+    username = models.CharField(
+        max_length=255,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_('Email server: Username'),
+        help_text=_('Optional: The username required to authenticate on the email server')
+    )
+    password = models.CharField(
+        max_length=255,
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_('Email server: Password'),
+        help_text=_('Optional: The password required to authenticate on the email server')
+    )
+    use_tls = models.BooleanField(
+        default=False,
+        verbose_name=_('Email server: Use TLS'),
+        help_text=_('Optional: Whether the email server uses TLS for encryption')
+    )
+    use_ssl = models.BooleanField(
+        default=False,
+        verbose_name=_('Email server: Use SSL'),
+        help_text=_('Optional: Whether the email server uses SSL for encryption')
+    )
+
+    latest_sync = models.DateTimeField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_('Latest sync'),
+        help_text=_('Timestamp of latest email sent successfully. Automatically updated by application')
+    )
+    next_sync = models.DateTimeField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_('Next sync'),
+        help_text=_('Timestamp of next email sent. Automatically updated by application')
+    )
+
+    def __str__(self):
+        return self._meta.verbose_name.title()
+
+    class Meta:
+        default_permissions = tuple()
+        verbose_name = _('Email configuration')

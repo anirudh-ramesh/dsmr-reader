@@ -55,6 +55,9 @@ msgstr "Genereert een generiek signaal dat gebruikt kan worden door plugins voor
 msgid "Forces single run, overriding Infinite Command mixin"
 msgstr "Forceert enkele uitvoer."
 
+msgid "The language used in backend processes"
+msgstr "De gebruikte taal in achtergrondprocessen"
+
 msgid "Detailed instructions for restoring a backup can be found here: <a href=\"https://dsmr-reader.readthedocs.io/nl/latest/faq.html#how-do-i-restore-a-database-backup\">FAQ in documentation</a>"
 msgstr "Gedetailleerde instructies voor het herstellen van een back-up kun je hier terugvinden: <a href=\"https://dsmr-reader.readthedocs.io/nl/latest/faq.html#how-do-i-restore-a-database-backup\">FAQ in documentatie</a>"
 
@@ -66,6 +69,12 @@ msgstr "Automatische velden"
 
 msgid "Detailed instructions for configuring Dropbox can be found here: <a href=\"https://dsmr-reader.readthedocs.io/nl/latest/admin/backup_dropbox.html\">Documentation</a>"
 msgstr "Gedetailleerde instructies voor het koppelen met Dropbox kun je hier terugvinden: <a href=\"https://dsmr-reader.readthedocs.io/nl/latest/admin/backup_dropbox.html\">Documentatie</a>"
+
+msgid "Email settings"
+msgstr "E-mailinstellingen"
+
+msgid "Enter your outgoing email settings here for sending the emails containing a backup"
+msgstr "Vul hier je uitgaande e-mailgegevens in voor het versturen van een aparte back-up per e-mail"
 
 msgid "Backup"
 msgstr "Backup"
@@ -115,11 +124,65 @@ msgstr "Tijdstip van de volgende synchronisatie met Dropbox. Applicatie werkt di
 msgid "Dropbox configuration"
 msgstr "Dropbox-configuratie"
 
+msgid "The email address to send the backup to"
+msgstr "Het e-mailadres waar de back-up naar gestuurd wordt"
+
+msgid "Email server: Host"
+msgstr "E-mail server: Hostnaam (of server)"
+
+msgid "The hostname of the server used to send emails with"
+msgstr "De hostnaam van de server die gebruikt wordt om e-mails mee te versturen"
+
+msgid "Email server: Port"
+msgstr "E-mail server: Poort"
+
+msgid "The port used by the email server to send mail"
+msgstr "De poort van de server die gebruikt wordt om e-mails mee te versturen"
+
+msgid "Email server: Username"
+msgstr "E-mail server: Gebruikersnaam"
+
+msgid "Optional: The username required to authenticate on the email server"
+msgstr "Optioneel: De gebruikersnaam voor authenticatie op de e-mailserver."
+
+msgid "Email server: Password"
+msgstr "E-mail server: Wachtwoord"
+
+msgid "Optional: The password required to authenticate on the email server"
+msgstr "Optioneel: Het wachtwoord voor authenticatie op de e-mailserver."
+
+msgid "Email server: Use TLS"
+msgstr "E-mail server: Gebruik TLS"
+
+msgid "Optional: Whether the email server uses TLS for encryption"
+msgstr "Optioneel: Geeft aan of de e-mailserver TLS gebruikt voor encryptie"
+
+msgid "Email server: Use SSL"
+msgstr "E-mail server: Gebruik SSL"
+
+msgid "Optional: Whether the email server uses SSL for encryption"
+msgstr "Optioneel: Geeft aan of de e-mailserver SSL gebruikt voor encryptie"
+
+msgid "Timestamp of latest email sent successfully. Automatically updated by application"
+msgstr "Tijdstip van de laatst verzonden e-mail. Applicatie werkt dit automatisch bij."
+
+msgid "Timestamp of next email sent. Automatically updated by application"
+msgstr "Tijdstip van de volgende e-mail. Applicatie werkt dit automatisch bij."
+
+msgid "Email configuration"
+msgstr "E-mailconfiguratie"
+
 msgid "[{}] Unable to upload files to Dropbox due to {}. Ignoring new files for the next {} hours..."
 msgstr "[{}] Kan geen nieuwe bestanden uploaden naar Dropbox, wegens {}, voor de komende {} uur..."
 
 msgid "[{}] Unable to upload files to Dropbox due to {}. Removing credentials..."
 msgstr "[{}] Kan geen nieuwe bestanden uploaden naar Dropbox wegens {}. Logingegevens voor Dropbox weggehaald..."
+
+msgid "DSMR-reader day/hour statistics backup"
+msgstr "DSMR-reader back-up van dag- en uurstatistieken"
+
+msgid "This is an automated email, containing a backup of the day and hour statistics in the attachment."
+msgstr "Dit is een automatisch verstuurde e-mail, met in de bijlage een back-up van de dag- en uurstatistieken."
 
 msgid "Consumption"
 msgstr "Verbruik"

@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from solo.admin import SingletonModelAdmin
 
-from .models.settings import BackupSettings, DropboxSettings
+from .models.settings import BackupSettings, DropboxSettings, EmailSettings
 
 
 @admin.register(BackupSettings)
@@ -46,6 +46,34 @@ class DropboxSettingsAdmin(SingletonModelAdmin):
                 'description': _(
                     'Detailed instructions for configuring Dropbox can be found here: <a href="https://dsmr-reader.read'
                     'thedocs.io/nl/latest/admin/backup_dropbox.html">Documentation</a>'
+                )
+            }
+        ),
+        (
+            _('Automatic fields'), {
+                'fields': ['latest_sync', 'next_sync']
+            }
+        ),
+    )
+
+
+@admin.register(EmailSettings)
+class EmailSettingsAdmin(SingletonModelAdmin):
+    readonly_fields = ('latest_sync', 'next_sync')
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '64'})},
+    }
+    fieldsets = (
+        (
+            None, {
+                'fields': ['email_to']
+            }
+        ),
+        (
+            _('Email settings'), {
+                'fields': ['host', 'port', 'username', 'password', 'use_tls', 'use_ssl'],
+                'description': _(
+                    'Enter your outgoing email settings here for sending the emails containing a backup'
                 )
             }
         ),
