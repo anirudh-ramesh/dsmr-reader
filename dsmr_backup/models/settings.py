@@ -76,8 +76,20 @@ class DropboxSettings(SingletonModel):
         verbose_name = _('Dropbox configuration')
 
 
-class EmailSettings(SingletonModel):
+class EmailBackupSettings(SingletonModel):
     """ Backup by email settings. """
+    INTERVAL_DAILY = 1
+    INTERVAL_WEEKLY = 7
+    INTERVAL_BIWEEKLY = 14
+    INTERVAL_MONTHLY = 28
+
+    INTERVAL_CHOICES = (
+        (INTERVAL_DAILY, _('Daily')),
+        (INTERVAL_WEEKLY, _('Weekly')),
+        (INTERVAL_BIWEEKLY, _('Every two weeks')),
+        (INTERVAL_MONTHLY, _('Every four weeks')),
+    )
+
     email_to = models.EmailField(
         max_length=255,
         default=None,
@@ -85,48 +97,11 @@ class EmailSettings(SingletonModel):
         blank=True,
         help_text=_('The email address to send the backup to')
     )
-    host = models.CharField(
-        max_length=255,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name=_('Email server: Host'),
-        help_text=_('The hostname of the server used to send emails with')
+    interval = models.IntegerField(
+        default=INTERVAL_DAILY,
+        choices=INTERVAL_CHOICES,
+        help_text=_('The frequency of sending backups per email')
     )
-    port = models.IntegerField(
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name=_('Email server: Port'),
-        help_text=_('The port used by the email server to send mail')
-    )
-    username = models.CharField(
-        max_length=255,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name=_('Email server: Username'),
-        help_text=_('Optional: The username required to authenticate on the email server')
-    )
-    password = models.CharField(
-        max_length=255,
-        default=None,
-        null=True,
-        blank=True,
-        verbose_name=_('Email server: Password'),
-        help_text=_('Optional: The password required to authenticate on the email server')
-    )
-    use_tls = models.BooleanField(
-        default=False,
-        verbose_name=_('Email server: Use TLS'),
-        help_text=_('Optional: Whether the email server uses TLS for encryption')
-    )
-    use_ssl = models.BooleanField(
-        default=False,
-        verbose_name=_('Email server: Use SSL'),
-        help_text=_('Optional: Whether the email server uses SSL for encryption')
-    )
-
     latest_sync = models.DateTimeField(
         default=None,
         null=True,
@@ -147,4 +122,4 @@ class EmailSettings(SingletonModel):
 
     class Meta:
         default_permissions = tuple()
-        verbose_name = _('Email configuration')
+        verbose_name = _('Email backup configuration')

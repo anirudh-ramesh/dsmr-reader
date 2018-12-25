@@ -11,7 +11,7 @@ from dsmr_stats.models.statistics import DayStatistics
 from dsmr_datalogger.models.reading import DsmrReading
 from dsmr_frontend.models.message import Notification
 import dsmr_consumption.services
-import dsmr_backend.services
+import dsmr_backend.services.backend
 
 
 logger = logging.getLogger('commands')
@@ -42,7 +42,7 @@ def notify_pre_check():
 
 def create_consumption_message(day, stats):
     """ Create the action notification message """
-    capabilities = dsmr_backend.services.get_capabilities()
+    capabilities = dsmr_backend.services.backend.get_capabilities()
     day_date = (day - timezone.timedelta(hours=1)).strftime("%d-%m-%Y")
     message = _('Your daily usage statistics for {}\n').format(day_date)
 
@@ -175,7 +175,7 @@ def check_status():
     notification_settings = NotificationSetting.get_solo()
 
     if notification_settings.notification_service is None or \
-            not dsmr_backend.services.is_timestamp_passed(timestamp=status_settings.next_check):
+            not dsmr_backend.services.backend.is_timestamp_passed(timestamp=status_settings.next_check):
         return
 
     if not DsmrReading.objects.exists():

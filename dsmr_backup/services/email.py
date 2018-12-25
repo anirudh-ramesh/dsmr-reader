@@ -1,42 +1,34 @@
+import tempfile
 import logging
 
-from django.core.mail.backends.smtp import EmailBackend
 from django.utils.translation import ugettext_lazy as _
-from django.utils import translation
-from django.core import mail
+from django.utils import translation, timezone
 
-from dsmr_backup.models.settings import EmailSettings
+from dsmr_backup.models.settings import EmailBackupSettings
 from dsmr_backend.models.settings import BackendSettings
+import dsmr_backend.services.email
+import dsmr_backup.services.backup
 
 
 logger = logging.getLogger('commands')
 
 
-def send_backup():
-    backend_settings = BackendSettings.get_solo()
-    email_settings = EmailSettings.get_solo()
+def run(scheduled_process):
+    """ Creates a new statistics backup and sends it per email. """
+    temp_dir = tempfile.TemporaryDirectory()
+    backup_file = dsmr_backup.services.backup.create_statistics_backup(folder=temp_dir.name)
 
-    logger.debug(
-        ' - Email backup: Preparing to send email using mail server %s:%s',
-        email_settings.host,
-        email_settings.port
-    )
-    email_backend = EmailBackend(
-        host=email_settings.host,
-        port=email_settings.port,
-        username=email_settings.username,
-        password=email_settings.password,
-        use_tls=email_settings.use_tls,
-        use_ssl=email_settings.use_ssl
+    email_backup_settings = EmailBackupSettings.get_solo()
+
+    with translation.override(language=BackendSettings.get_solo().language):
+        subject = _('DSMR-reader day/hour statistics backup')
+        body = _('This is an automated email, containing a backup of the day and hour statistics in the attachment.')
+
+    dsmr_backend.services.email.send(
+        to=email_backup_settings.email_to,
+        subject=subject,
+        body=body,
+        attachment=backup_file
     )
 
-    # Force translations.
-    with translation.override(language=backend_settings.language):
-        logger.debug(' - Email backup: Sending email to %s', email_settings.email_to)
-        mail.EmailMessage(
-            _('DSMR-reader day/hour statistics backup'),
-            _('This is an automated email, containing a backup of the day and hour statistics in the attachment.'),
-            email_settings.email_to,
-            [email_settings.email_to],
-            connection=email_backend,
-        ).send()
+    scheduled_process.delay(timezone.timedelta(days=email_backup_settings.interval))

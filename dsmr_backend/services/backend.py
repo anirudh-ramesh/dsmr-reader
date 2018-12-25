@@ -224,3 +224,11 @@ def is_recent_installation():
         applied__lt=timezone.now() - timezone.timedelta(hours=1)
     ).exists()
     return not has_old_migration
+
+
+def has_changed(instance, fields):
+    if not instance.pk:
+        return True
+
+    old = instance.__class__.objects.get(pk=instance.pk)
+    return any([getattr(old, x) != getattr(instance, x) for x in fields])
