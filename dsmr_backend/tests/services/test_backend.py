@@ -15,8 +15,6 @@ import dsmr_backend.services.backend
 
 
 class TestServices(InterceptStdoutMixin, TestCase):
-    support_gas_readings = None
-
     def test_data_capabilities(self):
         capabilities = dsmr_backend.services.backend.get_capabilities()
         self.assertIn('electricity', capabilities.keys())

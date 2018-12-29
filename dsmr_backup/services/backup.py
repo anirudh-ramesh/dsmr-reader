@@ -109,11 +109,11 @@ def create():
     backup_settings.save()
 
 
-def create_statistics_backup(folder):
+def create_statistics_backup(folder):  # pragma: no cover
     """ Creates a backup of the database, but only containing the day and hour statistics."""
     if connection.vendor != 'postgresql':
         # Only PostgreSQL support for newer features.
-        raise NotImplementedError('Unsupported backup backend: {}'.format(connection.vendor))  # pragma: no cover
+        raise NotImplementedError('Unsupported backup backend: {}'.format(connection.vendor))
 
     backup_file = os.path.join(folder, 'dsmrreader-{}-backup-{}.sql'.format(
         connection.vendor, formats.date_format(timezone.now().date(), 'l')
@@ -130,7 +130,7 @@ def create_statistics_backup(folder):
         ], env={
             'PGPASSWORD': settings.DATABASES['default']['PASSWORD']
         },
-        stdout=open(backup_file, 'w')  # pragma: no cover
+        stdout=open(backup_file, 'w')
     )
 
     backup_process.wait()
